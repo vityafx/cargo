@@ -52,7 +52,7 @@ fn metadata_full(ws: &Workspace,
                                          opt.all_features,
                                          opt.no_default_features,
                                          &specs,
-                                         "")?;
+                                         &[])?;
     let (packages, resolve) = deps;
 
     let packages = packages.package_ids()

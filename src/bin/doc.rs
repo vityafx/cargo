@@ -14,7 +14,7 @@ pub struct Options {
     flag_manifest_path: Option<String>,
     flag_no_default_features: bool,
     flag_no_deps: bool,
-    flag_excludes: String,
+    flag_exclude: Vec<String>,
     flag_open: bool,
     flag_release: bool,
     flag_verbose: u32,
@@ -43,7 +43,7 @@ Options:
     --open                       Opens the docs in a browser after the operation
     -p SPEC, --package SPEC ...  Package to document
     --all                        Document all packages in the workspace
-    --excludes SPECS             Document all packages except specified
+    --exclude SPEC ...           Document all packages except specified
     --no-deps                    Don't build documentation for dependencies
     -j N, --jobs N               Number of parallel jobs, defaults to # of CPUs
     --lib                        Document only this package's library
@@ -68,7 +68,6 @@ built. The output is all placed in `target/doc` in rustdoc's usual format.
 
 All packages in the workspace are documented if the `--all` flag is supplied. The
 `--all` flag is automatically assumed for a virtual manifest.
-Note that `--exclude` has to be specified in conjunction with the `--all` flag.
 
 If the --package argument is given, then SPEC is a package id specification
 which indicates which package should be documented. If it is not given, then the
@@ -99,7 +98,7 @@ pub fn execute(options: Options, config: &mut Config) -> CliResult {
     let empty = Vec::new();
     let doc_opts = ops::DocOptions {
         open_result: options.flag_open,
-        excludes: &options.flag_excludes,
+        exclude: &options.flag_exclude,
         compile_opts: ops::CompileOptions {
             config: config,
             jobs: options.flag_jobs,
